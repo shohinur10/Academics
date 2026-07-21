@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Button, Chip, Divider, Stack, Typography } from '@mui/material';
+import { Button, Chip, Divider, Stack, Typography } from '@mui/material';
 import useDeviceDetect from '../../libs/hooks/useDeviceDetect';
 import withLayoutFull from '../../libs/components/layout/LayoutFull';
 import { NextPage } from 'next';
@@ -154,7 +154,7 @@ const CourseDetail: NextPage = () => {
 						</Stack>
 					</Stack>
 					<Stack className={'right-config'} sx={{ minWidth: 320 }}>
-						<Box
+						<Stack
 							sx={{
 								p: 3,
 								borderRadius: '12px',
@@ -185,7 +185,7 @@ const CourseDetail: NextPage = () => {
 							<Typography variant="body2" color="text.secondary">
 								Category: {course.courseCategory}
 							</Typography>
-						</Box>
+						</Stack>
 					</Stack>
 				</Stack>
 				{relatedCourses.length > 0 && (

@@ -1,70 +1,96 @@
 import React from 'react';
-import { Button, Typography } from '@mui/material';
-import useDeviceDetect from '../../hooks/useDeviceDetect';
 import Link from 'next/link';
 import { useTranslation } from 'next-i18next';
+import useDeviceDetect from '../../hooks/useDeviceDetect';
+import EastOutlinedIcon from '@mui/icons-material/EastOutlined';
+import PlayCircleOutlinedIcon from '@mui/icons-material/PlayCircleOutlined';
+import PeopleAltOutlinedIcon from '@mui/icons-material/PeopleAltOutlined';
+import HeroVisual from './HeroVisual';
+
+interface HeroStat {
+	value: string;
+	label: string;
+}
+
+const STATS: HeroStat[] = [
+	{ value: '500+', label: 'Students' },
+	{ value: '20+', label: 'Courses' },
+	{ value: '15+', label: 'Instructors' },
+	{ value: '98%', label: 'Satisfaction' },
+];
 
 const HeroSection = () => {
 	const device = useDeviceDetect();
 	const { t } = useTranslation('common');
 
-	const stats = [
-		{ value: '500+', label: t('Students') },
-		{ value: '20+', label: t('Courses') },
-		{ value: '15+', label: t('Instructors') },
-		{ value: '98%', label: t('Satisfaction') },
-	];
+	const heroContent = (
+		<div className={'hero-content'}>
+			<span className={'hero-badge'}>✨ {t('Empower Your Future')}</span>
+			<h1 className={'hero-title'}>
+				{t('Hero Heading')} <span className={'highlight'}>{t('Hero Heading Highlight')}</span>
+			</h1>
+			<p className={'hero-subtitle'}>{t('Hero Subtitle')}</p>
+			<div className={'hero-actions'}>
+				<Link href={'/course'}>
+					<button type="button" className={'hero-btn-primary'}>
+						{t('Browse Courses')}
+						<EastOutlinedIcon />
+					</button>
+				</Link>
+				<Link href={'/cs'}>
+					<button type="button" className={'hero-btn-secondary'}>
+						<PlayCircleOutlinedIcon />
+						{t('Free Trial')}
+					</button>
+				</Link>
+			</div>
+			<div className={'hero-stats'}>
+				{STATS.map((stat, index) => (
+					<React.Fragment key={stat.label}>
+						{index === 0 && (
+							<div className={'hero-stats-icon'} aria-hidden="true">
+								<PeopleAltOutlinedIcon />
+							</div>
+						)}
+						<div className={'hero-stat'}>
+							<strong>{stat.value}</strong>
+							<span>{t(stat.label)}</span>
+						</div>
+					</React.Fragment>
+				))}
+			</div>
+		</div>
+	);
 
 	if (device === 'mobile') {
 		return (
-			<div className={'hero-section'} style={{ padding: '24px 16px' }}>
-				<Typography variant="h4" className={'hero-title'}>
-					{t('Hero Title')}
-				</Typography>
-				<Typography className={'hero-subtitle'}>{t('Hero Subtitle')}</Typography>
-				<div style={{ display: 'flex', gap: 8, marginTop: 16 }}>
-					<Link href="/course">
-						<Button variant="contained" size="small">
-							{t('Browse Courses')}
-						</Button>
-					</Link>
-					<Link href="/cs">
-						<Button variant="outlined" size="small" sx={{ color: '#fff', borderColor: '#fff' }}>
-							{t('Free Trial')}
-						</Button>
-					</Link>
+			<section className={'home-hero'}>
+				<div className={'hero-decor'} aria-hidden="true">
+					<span className={'blob blob-1'} />
+					<span className={'blob blob-2'} />
 				</div>
-			</div>
+				<div className={'hero-grid'}>
+					{heroContent}
+					<HeroVisual />
+				</div>
+			</section>
 		);
 	}
 
 	return (
-		<div className={'hero-section'}>
-			<Typography variant="h2" className={'hero-title'}>
-				{t('Hero Title')}
-			</Typography>
-			<Typography className={'hero-subtitle'}>{t('Hero Subtitle')}</Typography>
-			<div className={'hero-actions'} style={{ display: 'flex', gap: 16 }}>
-				<Link href="/course">
-					<Button variant="contained" size="large" className={'hero-btn-primary'}>
-						{t('Browse Courses')}
-					</Button>
-				</Link>
-				<Link href="/cs">
-					<Button variant="outlined" size="large" className={'hero-btn-secondary'}>
-						{t('Free Trial')}
-					</Button>
-				</Link>
+		<section className={'home-hero'}>
+			<div className={'hero-decor'} aria-hidden="true">
+				<span className={'blob blob-1'} />
+				<span className={'blob blob-2'} />
+				<span className={'blob blob-3'} />
+				<span className={'sphere sphere-1'} />
+				<span className={'sphere sphere-2'} />
 			</div>
-			<div className={'hero-stats'} style={{ display: 'flex', gap: 32, marginTop: 40 }}>
-				{stats.map((stat) => (
-					<div key={stat.label} className={'hero-stat'}>
-						<Typography className={'hero-stat-value'}>{stat.value}</Typography>
-						<Typography className={'hero-stat-label'}>{stat.label}</Typography>
-					</div>
-				))}
+			<div className={'hero-grid'}>
+				{heroContent}
+				<HeroVisual />
 			</div>
-		</div>
+		</section>
 	);
 };
 

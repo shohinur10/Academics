@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Stack, Box, Button, FormControl, Select, MenuItem } from '@mui/material';
+import { Stack, Button, FormControl, Select, MenuItem } from '@mui/material';
 import useDeviceDetect from '../../hooks/useDeviceDetect';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
@@ -92,11 +92,11 @@ const CourseSearchFilter = () => {
 						))}
 					</Select>
 				</FormControl>
-				<Box>
+				<div>
 					<Button variant="contained" className={'search-btn'} onClick={handleSearch}>
 						{t('Course Search')}
 					</Button>
-				</Box>
+				</div>
 			</Stack>
 		</Stack>
 	);

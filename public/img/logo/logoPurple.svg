@@ -1,0 +1,14 @@
+<svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="acadLogoGrad" x1="0" y1="0" x2="44" y2="44" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#5B35F5"/>
+      <stop offset="0.55" stop-color="#7648FF"/>
+      <stop offset="1" stop-color="#8B5CF6"/>
+    </linearGradient>
+  </defs>
+  <rect width="44" height="44" rx="13" fill="url(#acadLogoGrad)"/>
+  <path d="M22 11.5L34.5 17.5L22 23.5L9.5 17.5L22 11.5Z" fill="#FFFFFF"/>
+  <path d="M15.5 21.2V26C15.5 28.3 18.4 30.1 22 30.1C25.6 30.1 28.5 28.3 28.5 26V21.2L22 24.4L15.5 21.2Z" fill="#FFFFFF" opacity="0.92"/>
+  <rect x="32.4" y="17.8" width="1.9" height="8.2" rx="0.95" fill="#FFFFFF" opacity="0.85"/>
+  <circle cx="33.35" cy="27.4" r="1.6" fill="#FFC24B"/>
+</svg>
