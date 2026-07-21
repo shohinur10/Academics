@@ -7,7 +7,7 @@ import TrackChangesOutlinedIcon from '@mui/icons-material/TrackChangesOutlined';
 import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined';
 import WorkspacePremiumOutlinedIcon from '@mui/icons-material/WorkspacePremiumOutlined';
 
-interface FeatureItem {
+export interface FeatureItem {
 	icon: React.ReactNode;
 	tone: string;
 	title: string;
@@ -53,12 +53,16 @@ const FEATURES: FeatureItem[] = [
 	},
 ];
 
-const FeatureStrip = () => {
+interface FeatureStripProps {
+	items?: FeatureItem[];
+}
+
+const FeatureStrip = ({ items = FEATURES }: FeatureStripProps) => {
 	const { t } = useTranslation('common');
 
 	return (
 		<section className={'feature-strip'} aria-label={t('Empower Your Future')}>
-			{FEATURES.map((feature, index) => (
+			{items.map((feature, index) => (
 				<div key={feature.title} className={`feature-item ${index !== 0 ? 'with-separator' : ''}`}>
 					<div className={`feature-icon tone-${feature.tone}`}>{feature.icon}</div>
 					<strong>{t(feature.title)}</strong>

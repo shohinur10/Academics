@@ -19,6 +19,10 @@ export interface CourseSearch {
 	skillList?: CourseSkill[];
 	pricesRange?: PricesRange;
 	periodsRange?: PeriodsRange;
+	/** Course length in weeks. */
+	durationRange?: PricesRange;
+	/** Minimum average rating, e.g. 4.5. */
+	minRating?: number;
 	text?: string;
 }
 

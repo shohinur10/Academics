@@ -45,11 +45,9 @@ const HomeHeader = () => {
 				</div>
 
 				<div className={'header-right'}>
-					<Link href={'/course'}>
-						<IconButton className={'header-search-btn'} aria-label={t('Course Search')}>
-							<SearchOutlinedIcon />
-						</IconButton>
-					</Link>
+					<IconButton className={'header-search-btn'} aria-label={t('Course Search')} href={'/course'}>
+						<SearchOutlinedIcon />
+					</IconButton>
 
 					{user?._id ? (
 						<>
