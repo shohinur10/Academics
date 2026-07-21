@@ -1,0 +1,39 @@
+export enum CourseType {
+	ONLINE = 'ONLINE',
+	OFFLINE = 'OFFLINE',
+	HYBRID = 'HYBRID',
+}
+
+export enum CourseStatus {
+	DRAFT = 'DRAFT',
+	UPCOMING = 'UPCOMING',
+	ACTIVE = 'ACTIVE',
+	CLOSED = 'CLOSED',
+	ARCHIVED = 'ARCHIVED',
+}
+
+export enum CourseLevel {
+	BEGINNER = 'BEGINNER',
+	ELEMENTARY = 'ELEMENTARY',
+	INTERMEDIATE = 'INTERMEDIATE',
+	ADVANCED = 'ADVANCED',
+}
+
+export enum CourseCategory {
+	ENGLISH = 'ENGLISH',
+	KOREAN = 'KOREAN',
+	CHINESE = 'CHINESE',
+	JAPANESE = 'JAPANESE',
+	IELTS = 'IELTS',
+	TOEIC = 'TOEIC',
+	OTHER = 'OTHER',
+}
+
+export enum CourseSkill {
+	PHONICS = 'PHONICS',
+	SPEAKING = 'SPEAKING',
+	GRAMMAR = 'GRAMMAR',
+	READING = 'READING',
+	WRITING = 'WRITING',
+	LISTENING = 'LISTENING',
+}
