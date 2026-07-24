@@ -1,0 +1,882 @@
+/**
+ * Dedicated Community mobile redesign overrides.
+ * Imported last among community styles. Targets 430 / 390 / 375 / 320 widths.
+ */
+
+$cm-phone: 767px;
+$cm-narrow: 430px;
+$cm-xs: 360px;
+
+/* ---------- Shared touch + focus ---------- */
+@media (max-width: $cm-phone) {
+	.community-home-page,
+	.community-chat-room-page,
+	.community-post-page,
+	.study-groups-page,
+	.study-group-detail-page,
+	.create-community-modal,
+	.community-rooms-drawer,
+	.chat-rooms-drawer,
+	.chat-members-drawer,
+	.chat-thread-drawer,
+	.group-members-drawer,
+	.group-chat-drawer,
+	.reply-thread-drawer {
+		button,
+		a.stub-btn,
+		a.join-group-btn,
+		a.download-btn,
+		.composer-action,
+		.feed-tabs button,
+		.group-tabs button,
+		.text-action,
+		.icon-btn,
+		.icon-more,
+		.mobile-rooms-btn,
+		.header-create-btn {
+			min-height: 44px;
+		}
+
+		*:focus-visible {
+			outline: 2.5px solid #5b35f5;
+			outline-offset: 2px;
+		}
+	}
+
+	/* Avoid hover-only discovery — keep action affordances visible */
+	.community-chat-room-page .message-actions,
+	.community-chat-room-page .icon-more {
+		opacity: 1;
+		visibility: visible;
+	}
+}
+
+/* ---------- Community Home ---------- */
+@media (max-width: $cm-phone) {
+	.community-home-page {
+		.community-home-container {
+			width: 100%;
+			max-width: 100%;
+			padding: 12px max(12px, env(safe-area-inset-left)) calc(28px + env(safe-area-inset-bottom))
+				max(12px, env(safe-area-inset-right));
+			overflow-x: clip;
+		}
+
+		.community-home-layout {
+			display: flex;
+			flex-direction: column;
+			gap: 16px;
+			width: 100%;
+		}
+
+		.community-left-col {
+			display: none;
+		}
+
+		.community-main-col,
+		.community-right-col {
+			width: 100%;
+			min-width: 0;
+		}
+
+		.community-mobile-bar {
+			display: block;
+			margin-bottom: 4px;
+		}
+
+		.mobile-rooms-btn {
+			width: 100%;
+			justify-content: flex-start;
+			min-height: 48px;
+			padding: 12px 14px;
+			border-radius: 14px;
+			font-size: 14px;
+			font-weight: 700;
+		}
+
+		/* Compact hero */
+		.community-hero {
+			padding: 16px 14px 14px;
+			border-radius: 18px;
+			margin-bottom: 16px;
+		}
+
+		.hero-title {
+			font-size: clamp(22px, 6.4vw, 28px);
+			letter-spacing: -0.5px;
+		}
+
+		.hero-subtitle {
+			font-size: 13.5px;
+			margin-top: 8px;
+		}
+
+		.community-metrics {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+			gap: 8px;
+			margin-top: 14px;
+		}
+
+		.community-metrics li {
+			padding: 10px 10px;
+			border-radius: 14px;
+
+			.metric-icon {
+				width: 32px;
+				height: 32px;
+			}
+
+			strong {
+				font-size: 14px;
+			}
+
+			span {
+				font-size: 11px;
+			}
+		}
+
+		.community-composer {
+			padding: 10px;
+			border-radius: 14px;
+			margin-top: 14px;
+
+			input {
+				font-size: 16px; /* reduce iOS zoom */
+				padding: 10px 4px 12px;
+			}
+		}
+
+		.composer-actions {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			gap: 8px;
+		}
+
+		.composer-action {
+			justify-content: center;
+			min-height: 44px;
+			padding: 10px 8px;
+			font-size: 12.5px;
+		}
+
+		/* Trending: horizontal snap scroll */
+		.trending-grid {
+			display: flex;
+			gap: 12px;
+			overflow-x: auto;
+			scroll-snap-type: x mandatory;
+			-webkit-overflow-scrolling: touch;
+			padding-bottom: 4px;
+			margin: 0 -4px;
+			padding-left: 4px;
+			padding-right: 4px;
+			scrollbar-width: thin;
+		}
+
+		.trending-card {
+			flex: 0 0 min(78vw, 300px);
+			scroll-snap-align: start;
+			max-width: min(78vw, 300px);
+		}
+
+		/* Right sidebar stacks as sections */
+		.community-right-col {
+			display: flex;
+			flex-direction: column;
+			gap: 14px;
+		}
+
+		.community-panel {
+			border-radius: 16px;
+			padding: 14px;
+		}
+
+		/* Study groups: one column */
+		.study-groups-grid,
+		.study-groups-grid.rich {
+			grid-template-columns: 1fr;
+			gap: 12px;
+		}
+
+		.study-group-card--rich .group-cover,
+		.study-group-card--rich .group-cover-img {
+			height: 84px;
+		}
+
+		.feed-tabs {
+			overflow-x: auto;
+			-webkit-overflow-scrolling: touch;
+			flex-wrap: nowrap;
+			gap: 8px;
+			padding-bottom: 4px;
+
+			button {
+				flex: 0 0 auto;
+				min-height: 44px;
+				padding: 10px 16px;
+			}
+		}
+
+		.feed-load-more {
+			display: flex;
+			width: 100%;
+			margin-top: 12px;
+			align-items: center;
+			justify-content: center;
+			min-height: 48px;
+			border: 1px solid #e4e1f4;
+			background: #fff;
+			border-radius: 14px;
+			font-weight: 700;
+			cursor: pointer;
+		}
+
+		.activity-feed-item {
+			padding: 12px;
+			gap: 10px;
+		}
+
+		.section-heading-actions {
+			width: 100%;
+
+			.create-group-btn,
+			.section-link {
+				min-height: 44px;
+			}
+		}
+	}
+
+	.community-rooms-drawer {
+		.MuiDrawer-paper {
+			width: min(92vw, 340px);
+			padding-bottom: calc(16px + env(safe-area-inset-bottom));
+			padding-top: env(safe-area-inset-top);
+		}
+
+		.rooms-drawer-head {
+			min-height: 56px;
+			padding: 12px 14px;
+
+			button {
+				min-width: 44px;
+				min-height: 44px;
+			}
+		}
+	}
+}
+
+@media (max-width: $cm-narrow) {
+	.community-home-page {
+		.hero-welcome {
+			font-size: 13px;
+		}
+
+		.trending-card {
+			flex-basis: min(86vw, 280px);
+			max-width: min(86vw, 280px);
+		}
+	}
+}
+
+@media (max-width: 320px) {
+	.community-home-page {
+		.composer-actions {
+			grid-template-columns: 1fr;
+		}
+
+		.community-metrics li .metric-icon {
+			display: none;
+		}
+	}
+}
+
+/* Wide desktop: keep community shells from overflowing viewport gutters */
+@media (min-width: 1200px) {
+	.community-home-page .community-home-container,
+	.community-chat-room-page .chat-room-shell,
+	.community-post-page .community-post-layout,
+	.study-groups-page .study-groups-container,
+	.study-group-detail-page .study-group-detail-container {
+		box-sizing: border-box;
+		max-width: min(1280px, 100%);
+	}
+}
+
+/* ---------- Chat ---------- */
+@media (max-width: $cm-phone) {
+	.community-chat-room-page {
+		overflow-x: clip;
+
+		.chat-room-shell {
+			grid-template-columns: 1fr;
+			gap: 0;
+			padding: 0;
+			min-height: calc(100dvh - 62px);
+		}
+
+		.chat-center-col {
+			width: 100%;
+			max-width: 100%;
+			border-radius: 0;
+			border-left: 0;
+			border-right: 0;
+			min-height: calc(100dvh - 62px - env(safe-area-inset-bottom));
+			max-height: calc(100dvh - 62px - env(safe-area-inset-bottom));
+			display: flex;
+			flex-direction: column;
+		}
+
+		.chat-room-header {
+			position: sticky;
+			top: 0;
+			z-index: 5;
+			padding: 8px max(10px, env(safe-area-inset-left)) 8px max(10px, env(safe-area-inset-right));
+			min-height: 56px;
+			background: #fff;
+		}
+
+		.mobile-only.icon-btn {
+			min-width: 44px;
+			min-height: 44px;
+		}
+
+		.chat-message-list-wrap,
+		.chat-message-scroller {
+			flex: 1;
+			min-height: 0;
+		}
+
+		.chat-composer {
+			position: sticky;
+			bottom: 0;
+			z-index: 6;
+			padding: 10px max(12px, env(safe-area-inset-left)) calc(10px + env(safe-area-inset-bottom))
+				max(12px, env(safe-area-inset-right));
+			background: #fff;
+			border-top: 1px solid #f1effa;
+
+			textarea {
+				font-size: 16px;
+				min-height: 44px;
+			}
+
+			.send-btn {
+				width: 48px;
+				height: 48px;
+				min-width: 48px;
+			}
+		}
+
+		.message-row .icon-more {
+			min-width: 44px;
+			min-height: 44px;
+		}
+
+		.quick-react button {
+			min-width: 40px;
+			min-height: 40px;
+			font-size: 18px;
+		}
+	}
+
+	.chat-rooms-drawer,
+	.chat-members-drawer {
+		.MuiDrawer-paper {
+			width: min(92vw, 360px);
+			padding-bottom: calc(12px + env(safe-area-inset-bottom));
+			padding-top: env(safe-area-inset-top);
+		}
+
+		.drawer-head {
+			min-height: 56px;
+
+			button {
+				min-width: 44px;
+				min-height: 44px;
+			}
+		}
+	}
+
+	.chat-thread-drawer.full .MuiDrawer-paper {
+		width: 100%;
+		height: 100%;
+		max-height: 100dvh;
+		border-radius: 0;
+		padding-bottom: env(safe-area-inset-bottom);
+		padding-top: env(safe-area-inset-top);
+	}
+
+	.chat-message-actions-menu {
+		.MuiMenuItem-root {
+			min-height: 48px;
+			font-size: 15px;
+		}
+	}
+}
+
+/* ---------- Create content ---------- */
+@media (max-width: $cm-phone) {
+	.create-community-modal {
+		.MuiDialog-paper {
+			width: 100% !important;
+			max-width: 100% !important;
+			height: 100%;
+			max-height: 100dvh;
+			margin: 0;
+			border-radius: 0;
+		}
+
+		.create-modal-inner {
+			max-height: 100dvh;
+			height: 100dvh;
+			display: flex;
+			flex-direction: column;
+		}
+
+		.create-modal-head {
+			padding: 12px 14px;
+			padding-top: max(12px, env(safe-area-inset-top));
+
+			h2 {
+				font-size: 18px;
+			}
+
+			button {
+				min-width: 44px;
+				min-height: 44px;
+			}
+		}
+
+		.create-modal-form {
+			flex: 1;
+			overflow-y: auto;
+			-webkit-overflow-scrolling: touch;
+			padding: 12px 14px 100px;
+		}
+
+		.type-grid {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+			gap: 8px;
+		}
+
+		.type-card {
+			min-height: 96px;
+			padding: 12px 10px;
+
+			h3 {
+				font-size: 13px;
+			}
+
+			p {
+				font-size: 11.5px;
+				display: -webkit-box;
+				-webkit-line-clamp: 2;
+				-webkit-box-orient: vertical;
+				overflow: hidden;
+			}
+		}
+
+		input,
+		textarea,
+		select {
+			font-size: 16px;
+		}
+
+		.create-layout.with-preview {
+			grid-template-columns: 1fr;
+		}
+
+		.create-preview {
+			order: 2;
+			margin-top: 12px;
+		}
+
+		.create-modal-footer,
+		.create-modal-actions {
+			position: sticky;
+			bottom: 0;
+			z-index: 4;
+			background: #fff;
+			border-top: 1px solid #f1effa;
+			padding: 10px 14px calc(10px + env(safe-area-inset-bottom));
+			margin-top: auto;
+		}
+
+		.footer-actions,
+		.create-modal-actions {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			gap: 8px;
+
+			button {
+				min-height: 48px;
+				width: 100%;
+			}
+		}
+
+		.field-grid-2 {
+			grid-template-columns: 1fr;
+		}
+	}
+}
+
+@media (max-width: 320px) {
+	.create-community-modal {
+		.type-card p {
+			display: none;
+		}
+	}
+}
+
+/* ---------- Discussion / posts ---------- */
+@media (max-width: $cm-phone) {
+	.community-post-page {
+		padding: 12px 0 calc(28px + env(safe-area-inset-bottom));
+		overflow-x: clip;
+
+		.community-post-layout {
+			width: 100%;
+			max-width: 100%;
+			grid-template-columns: 1fr;
+			gap: 14px;
+			padding: 0 max(12px, env(safe-area-inset-left)) 0 max(12px, env(safe-area-inset-right));
+		}
+
+		.community-post-article {
+			padding: 14px 12px 18px;
+			border-radius: 16px;
+		}
+
+		h1 {
+			font-size: clamp(22px, 6vw, 28px);
+			overflow-wrap: anywhere;
+		}
+
+		.post-toolbar {
+			flex-direction: column;
+			align-items: stretch;
+		}
+
+		.toolbar-actions {
+			display: grid;
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+			gap: 8px;
+
+			button {
+				min-height: 44px;
+				justify-content: center;
+			}
+		}
+
+		.reaction-row button {
+			min-height: 44px;
+			min-width: 44px;
+			padding: 8px 10px;
+		}
+
+		.post-body {
+			font-size: 15.5px;
+			overflow-wrap: anywhere;
+		}
+
+		.related-content {
+			order: 3;
+		}
+
+		.reply-item {
+			padding: 10px;
+			gap: 8px;
+
+			&.depth-1,
+			&.depth-2 {
+				margin-left: 0;
+				border-left: 3px solid #e4e1f4;
+				padding-left: 10px;
+			}
+		}
+
+		.reply-avatar {
+			width: 32px;
+			height: 32px;
+		}
+
+		.reply-composer textarea {
+			font-size: 16px;
+		}
+
+		.composer-actions button {
+			min-height: 44px;
+		}
+
+		.poll-option {
+			min-height: 48px;
+		}
+
+		.vote-btn,
+		.download-btn {
+			width: 100%;
+			justify-content: center;
+			min-height: 48px;
+		}
+	}
+
+	.reply-thread-drawer {
+		.MuiDrawer-paper {
+			padding-bottom: env(safe-area-inset-bottom);
+			padding-top: env(safe-area-inset-top);
+		}
+
+		&.full .MuiDrawer-paper {
+			width: 100%;
+			height: 100%;
+			max-height: 100dvh;
+			border-radius: 0;
+		}
+
+		.thread-panel {
+			height: 100%;
+			max-height: 100dvh;
+			display: flex;
+			flex-direction: column;
+			padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
+		}
+
+		.drawer-head {
+			min-height: 52px;
+
+			button {
+				min-width: 44px;
+				min-height: 44px;
+			}
+		}
+
+		.thread-replies {
+			flex: 1;
+			min-height: 0;
+			overflow: auto;
+			-webkit-overflow-scrolling: touch;
+		}
+
+		.reply-composer {
+			position: sticky;
+			bottom: 0;
+			background: #fff;
+			padding-top: 8px;
+		}
+	}
+}
+
+/* ---------- Study groups ---------- */
+@media (max-width: $cm-phone) {
+	.study-groups-page,
+	.study-group-detail-page {
+		padding: 12px 0 calc(28px + env(safe-area-inset-bottom));
+		overflow-x: clip;
+
+		.study-groups-container,
+		.study-group-detail-container {
+			width: 100%;
+			max-width: 100%;
+			padding: 0 max(12px, env(safe-area-inset-left)) 0 max(12px, env(safe-area-inset-right));
+		}
+
+		.study-groups-toolbar {
+			.toolbar-top {
+				flex-direction: column;
+				align-items: stretch;
+				gap: 12px;
+			}
+
+			h1 {
+				font-size: clamp(24px, 7vw, 32px);
+			}
+
+			.create-group-btn.primary {
+				width: 100%;
+				min-height: 48px;
+				justify-content: center;
+			}
+
+			.toolbar-search-row {
+				grid-template-columns: 1fr;
+
+				input[type='search'] {
+					font-size: 16px;
+					min-height: 48px;
+				}
+			}
+
+			.toolbar-filters {
+				flex-wrap: nowrap;
+				overflow-x: auto;
+				-webkit-overflow-scrolling: touch;
+				padding-bottom: 4px;
+
+				.MuiFormControl-root {
+					min-width: 148px;
+					flex: 0 0 auto;
+				}
+
+				.MuiFormControlLabel-root {
+					flex: 0 0 auto;
+					white-space: nowrap;
+				}
+			}
+		}
+
+		.study-groups-grid.rich {
+			grid-template-columns: 1fr;
+		}
+
+		.study-group-card--rich {
+			.join-group-btn {
+				min-height: 44px;
+				padding: 10px 14px;
+			}
+		}
+
+		.group-detail-header {
+			border-radius: 16px;
+		}
+
+		.group-detail-cover {
+			height: 120px;
+		}
+
+		.group-detail-header-body {
+			padding: 14px;
+
+			h1 {
+				font-size: clamp(22px, 6vw, 28px);
+			}
+
+			.group-detail-actions {
+				display: grid;
+				grid-template-columns: 1fr;
+				gap: 8px;
+
+				.join-group-btn,
+				.secondary-action-btn {
+					width: 100%;
+					min-height: 48px;
+					justify-content: center;
+				}
+			}
+		}
+
+		.group-tabs {
+			margin: 0 -4px 8px;
+			padding: 4px 4px 10px;
+			gap: 8px;
+
+			button {
+				min-height: 44px;
+				padding: 10px 16px;
+			}
+		}
+
+		.group-section {
+			padding: 14px;
+			border-radius: 14px;
+		}
+
+		.member-list li {
+			flex-wrap: wrap;
+
+			.member-actions {
+				width: 100%;
+
+				button {
+					min-height: 40px;
+				}
+			}
+		}
+
+		.group-mod-bar button {
+			min-height: 44px;
+		}
+	}
+
+	.group-chat-drawer,
+	.group-members-drawer {
+		.MuiDrawer-paper {
+			padding-top: env(safe-area-inset-top);
+			padding-bottom: env(safe-area-inset-bottom);
+		}
+
+		.drawer-head {
+			min-height: 56px;
+
+			button {
+				min-width: 44px;
+				min-height: 44px;
+			}
+		}
+	}
+
+	.group-chat-panel.is-fullscreen {
+		height: 100%;
+		max-height: 100dvh;
+
+		.chat-composer {
+			padding-bottom: calc(10px + env(safe-area-inset-bottom));
+		}
+	}
+}
+
+@media (max-width: $cm-xs) {
+	.study-group-detail-page {
+		.group-detail-badges {
+			gap: 6px;
+		}
+
+		.privacy-pill,
+		.activity-pill,
+		.role-pill {
+			font-size: 10px;
+		}
+	}
+}
+
+/* ---------- Reduce decorative cost on small screens ---------- */
+@media (max-width: $cm-phone) {
+	.community-home-page,
+	.community-post-page,
+	.study-groups-page,
+	.study-group-detail-page {
+		background: #f7f6fb;
+	}
+
+	.community-home-page .community-hero {
+		background: #f3efff;
+		box-shadow: none;
+	}
+
+	.navigation-drawer .MuiBackdrop-root,
+	.community-rooms-drawer .MuiBackdrop-root,
+	.chat-rooms-drawer .MuiBackdrop-root,
+	.chat-members-drawer .MuiBackdrop-root,
+	.chat-thread-drawer .MuiBackdrop-root,
+	.group-chat-drawer .MuiBackdrop-root,
+	.group-members-drawer .MuiBackdrop-root,
+	.reply-thread-drawer .MuiBackdrop-root {
+		backdrop-filter: none;
+		-webkit-backdrop-filter: none;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.community-home-page,
+	.community-chat-room-page,
+	.community-post-page,
+	.study-groups-page,
+	.study-group-detail-page {
+		*,
+		*::before,
+		*::after {
+			animation: none !important;
+			transition-duration: 0.01ms !important;
+			scroll-behavior: auto !important;
+		}
+	}
+}

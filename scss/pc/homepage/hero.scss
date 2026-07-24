@@ -595,6 +595,86 @@
 		flex-direction: row;
 		align-items: center;
 		gap: 8px;
+		min-width: 0;
+		flex: 1;
+	}
+
+	.home-logo-link {
+		text-decoration: none;
+		color: inherit;
+	}
+
+	.header-nav {
+		display: none;
+		align-items: center;
+		gap: 4px;
+		margin-left: 18px;
+	}
+
+	.header-nav-link {
+		padding: 8px 12px;
+		border-radius: 10px;
+		font-family: $font;
+		font-size: 14px;
+		font-weight: 600;
+		color: #4a4f68;
+		text-decoration: none;
+		white-space: nowrap;
+
+		&:hover {
+			color: #5b35f5;
+			background: #efeaff;
+		}
+
+		&.active {
+			color: #5b35f5;
+			background: #efeaff;
+		}
+
+		&:focus-visible {
+			outline: 2px solid #5b35f5;
+			outline-offset: 2px;
+		}
+	}
+
+	.header-create-btn {
+		display: none;
+		align-items: center;
+		gap: 4px;
+		padding: 8px 14px;
+		min-height: 40px;
+		border-radius: 999px;
+		background: linear-gradient(135deg, #5b35f5 0%, #7648ff 55%, #8b5cf6 100%);
+		color: #ffffff;
+		font-family: $font;
+		font-size: 13.5px;
+		font-weight: 700;
+		text-decoration: none;
+		box-shadow: 0 10px 22px rgba(91, 53, 245, 0.22);
+
+		svg {
+			font-size: 18px;
+		}
+
+		&:focus-visible {
+			outline: 2px solid #5b35f5;
+			outline-offset: 2px;
+		}
+	}
+
+	.header-notify-btn {
+		width: 42px;
+		height: 42px;
+		background: #ffffff;
+		border: 1px solid rgba(52, 45, 100, 0.1);
+		svg {
+			font-size: 20px;
+			color: #11152f;
+		}
+		&:focus-visible {
+			outline: 2px solid #5b35f5;
+			outline-offset: 2px;
+		}
 	}
 
 	.header-menu-btn {
@@ -692,6 +772,48 @@
 		}
 	}
 
+	@media (min-width: 1100px) {
+		.header-nav {
+			display: flex;
+		}
+
+		.header-create-btn {
+			display: inline-flex;
+		}
+
+		.header-menu-btn {
+			display: none;
+		}
+	}
+
+	/* Community routes: keep Create reachable as a 44px icon on phones/tablets. */
+	&.is-community-route {
+		.header-create-btn {
+			display: inline-flex;
+		}
+	}
+
+	@media (max-width: 1099px) {
+		&.is-community-route {
+			.header-create-btn {
+				width: 44px;
+				height: 44px;
+				min-height: 44px;
+				padding: 0;
+				justify-content: center;
+				border-radius: 50%;
+
+				.header-create-label {
+					display: none;
+				}
+			}
+
+			.header-right {
+				gap: 8px;
+			}
+		}
+	}
+
 	@media (max-width: 767px) {
 		.header-inner {
 			height: 62px;
@@ -713,8 +835,35 @@
 		.header-join-btn {
 			padding: 10px 12px;
 			border-radius: 50%;
+			min-width: 44px;
+			min-height: 44px;
 		}
 		.header-lang {
+			display: none;
+		}
+
+		.header-search-btn,
+		.header-notify-btn,
+		.header-menu-btn,
+		.header-user {
+			width: 44px;
+			height: 44px;
+			min-width: 44px;
+			min-height: 44px;
+		}
+
+		.header-right {
+			gap: 6px;
+		}
+
+		/* On very narrow community screens, keep Create + profile; tuck notify into drawer UX later. */
+		&.is-community-route .header-notify-btn {
+			display: none;
+		}
+	}
+
+	@media (max-width: 360px) {
+		.home-logo span {
 			display: none;
 		}
 	}

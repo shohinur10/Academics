@@ -19,7 +19,7 @@ export const HOME_NAV_ITEMS: HomeNavItem[] = [
 	{ label: 'Instructors', href: '/instructor', pathname: '/instructor', icon: <SchoolOutlinedIcon /> },
 	{
 		label: 'Community',
-		href: '/community?articleCategory=FREE',
+		href: '/community',
 		pathname: '/community',
 		icon: <GroupsOutlinedIcon />,
 	},

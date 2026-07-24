@@ -1,76 +1,59 @@
-import React from 'react';
-import { NextPage } from 'next';
-import { useRouter } from 'next/router';
-import { Box, Stack } from '@mui/material';
-import useDeviceDetect from '../../libs/hooks/useDeviceDetect';
-import withLayoutBasic from '../../libs/components/layout/LayoutBasic';
-import Notice from '../../libs/components/cs/Notice';
-import Faq from '../../libs/components/cs/Faq';
+import React, { useState } from 'react';
+import { GetStaticProps, NextPage } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import withLayoutCourse from '../../libs/components/layout/LayoutCourse';
+import HelpHero from '../../libs/components/cs/help/HelpHero';
+import HelpTopics from '../../libs/components/cs/help/HelpTopics';
+import HelpFeaturedFaqs from '../../libs/components/cs/help/HelpFeaturedFaqs';
+import HelpAnnouncements from '../../libs/components/cs/help/HelpAnnouncements';
+import HelpSystemStatus from '../../libs/components/cs/help/HelpSystemStatus';
+import HelpContactOptions from '../../libs/components/cs/help/HelpContactOptions';
+import {
+	FEATURED_FAQS,
+	HELP_CONTACT_OPTIONS,
+	HELP_TOPICS,
+	SYSTEM_STATUS,
+} from '../../libs/mock/supportHelpCenter.mock';
+import { featuredNoticesForHelpCenter } from '../../libs/mock/supportNotices.mock';
 
-export const getStaticProps = async ({ locale }: any) => ({
+export const getStaticProps: GetStaticProps = async ({ locale }) => ({
 	props: {
-		...(await serverSideTranslations(locale, ['common'])),
+		...(await serverSideTranslations(locale ?? 'en', ['common'])),
 	},
 });
 
-const CS: NextPage = () => {
-	const device = useDeviceDetect();
-	const router = useRouter();
+/** ACADEMICS Help Center — central Support hub. */
+const HelpCenterPage: NextPage = () => {
+	const [searchQuery, setSearchQuery] = useState('');
 
-	/** HANDLERS **/
-	const changeTabHandler = (tab: string) => {
-		router.push(
-			{
-				pathname: '/cs',
-				query: { tab: tab },
-			},
-			undefined,
-			{ scroll: false },
-		);
-	};
-	const tab = router.query.tab ?? 'notice';
+	return (
+		<div className={'help-center-page'}>
+			<div className={'help-center-container'}>
+				<HelpHero initialQuery={searchQuery} onSearch={setSearchQuery} />
+			</div>
 
-	if (device === 'mobile') {
-		return <h1>CS PAGE MOBILE</h1>;
-	} else {
-		return (
-			<Stack className={'cs-page'}>
-				<Stack className={'container'}>
-					<Box component={'div'} className={'cs-main-info'}>
-						<Box component={'div'} className={'info'}>
-							<span>Cs center</span>
-							<p>I will answer your questions</p>
-						</Box>
-						<Box component={'div'} className={'btns'}>
-							<div
-								className={tab == 'notice' ? 'active' : ''}
-								onClick={() => {
-									changeTabHandler('notice');
-								}}
-							>
-								Notice
-							</div>
-							<div
-								className={tab == 'faq' ? 'active' : ''}
-								onClick={() => {
-									changeTabHandler('faq');
-								}}
-							>
-								FAQ
-							</div>
-						</Box>
-					</Box>
+			<div className={'help-band lavender'}>
+				<div className={'help-center-container'}>
+					<HelpTopics topics={HELP_TOPICS} />
+				</div>
+			</div>
 
-					<Box component={'div'} className={'cs-content'}>
-						{tab === 'notice' && <Notice />}
+			<div className={'help-center-container'}>
+				<HelpFeaturedFaqs items={FEATURED_FAQS} />
+			</div>
 
-						{tab === 'faq' && <Faq />}
-					</Box>
-				</Stack>
-			</Stack>
-		);
-	}
+			<div className={'help-band lavender'}>
+				<div className={'help-center-container'}>
+					<HelpAnnouncements items={featuredNoticesForHelpCenter()} />
+				</div>
+			</div>
+
+			<div className={'help-center-container'}>
+				<HelpSystemStatus items={SYSTEM_STATUS} />
+				<HelpContactOptions options={HELP_CONTACT_OPTIONS} />
+			</div>
+		</div>
+	);
 };
 
-export default withLayoutBasic(CS);
+export default withLayoutCourse(HelpCenterPage, { title: 'Help Center — Academics' });

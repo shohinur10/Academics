@@ -1,7 +1,6 @@
 import React from 'react';
 import { useRouter } from 'next/router';
-import { Stack, Typography, Box } from '@mui/material';
-import useDeviceDetect from '../../hooks/useDeviceDetect';
+import { Stack, Typography } from '@mui/material';
 import { Member } from '../../types/member/member';
 import { REACT_APP_API_URL } from '../../config';
 import StarIcon from '@mui/icons-material/Star';
@@ -10,13 +9,16 @@ interface InstructorCardProps {
 	instructor: Member;
 }
 
+const resolveImage = (image?: string) => {
+	if (!image) return '/img/profile/defaultUser.svg';
+	if (image.startsWith('/') || image.startsWith('http')) return image;
+	return `${REACT_APP_API_URL}/${image}`;
+};
+
 const InstructorCard = (props: InstructorCardProps) => {
 	const { instructor } = props;
-	const device = useDeviceDetect();
 	const router = useRouter();
-	const instructorImage = instructor?.memberImage
-		? `${REACT_APP_API_URL}/${instructor?.memberImage}`
-		: '/img/profile/defaultUser.svg';
+	const instructorImage = resolveImage(instructor?.memberImage);
 
 	const handleClick = () => {
 		router.push({ pathname: '/instructor/detail', query: { id: instructor._id } });
@@ -27,10 +29,10 @@ const InstructorCard = (props: InstructorCardProps) => {
 			<img src={instructorImage} alt={instructor?.memberNick} />
 			<strong>{instructor?.memberNick}</strong>
 			<span>{instructor?.memberType}</span>
-			<Box className={'instructor-meta'}>
+			<div className={'instructor-meta'}>
 				<StarIcon sx={{ fontSize: 14, color: '#f5a623' }} />
 				<Typography variant="caption">{instructor?.memberRank}% · {instructor?.memberProperties} courses</Typography>
-			</Box>
+			</div>
 		</Stack>
 	);
 };

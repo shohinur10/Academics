@@ -13,9 +13,12 @@ const InstructorListCard = (props: InstructorListCardProps) => {
 	const { instructor } = props;
 	const device = useDeviceDetect();
 	const router = useRouter();
-	const imagePath = instructor?.memberImage
-		? `${REACT_APP_API_URL}/${instructor?.memberImage}`
-		: '/img/profile/defaultUser.svg';
+	const imagePath = (() => {
+		const image = instructor?.memberImage;
+		if (!image) return '/img/profile/defaultUser.svg';
+		if (image.startsWith('/') || image.startsWith('http')) return image;
+		return `${REACT_APP_API_URL}/${image}`;
+	})();
 
 	const pushDetailHandler = async (instructorId: string) => {
 		await router.push({ pathname: '/instructor/detail', query: { id: instructorId } });

@@ -21,6 +21,7 @@ import { T } from '../../libs/types/common';
 import EditIcon from '@mui/icons-material/Edit';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { BoardArticle } from '../../libs/types/board-article/board-article';
+import { getCommunityPostBySlug } from '../../libs/mock/communityPosts.store';
 const ToastViewerComponent = dynamic(() => import('../../libs/components/community/TViewer'), { ssr: false });
 
 export const getStaticProps = async ({ locale }: any) => ({
@@ -62,6 +63,15 @@ const CommunityDetail: NextPage = ({ initialInput, ...props }: T) => {
 	useEffect(() => {
 		if (articleId) setSearchFilter({ ...searchFilter, search: { commentRefId: articleId } });
 	}, [articleId]);
+
+	/** Redirect created / seeded community posts to the new discussion route. */
+	useEffect(() => {
+		if (!articleId || !router.isReady) return;
+		const post = getCommunityPostBySlug(articleId);
+		if (post) {
+			void router.replace(`/community/posts/${post.slug}`);
+		}
+	}, [articleId, router.isReady, router]);
 
 	/** HANDLERS **/
 	const tabChangeHandler = (event: React.SyntheticEvent, value: string) => {

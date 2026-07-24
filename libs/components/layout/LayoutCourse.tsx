@@ -5,12 +5,15 @@ import useDeviceDetect from '../../hooks/useDeviceDetect';
 import HomeHeader from '../homepage/HomeHeader';
 import Footer from '../Footer';
 import { getJwtToken, updateUserInfo } from '../../auth';
+import CreateCommunityContentModal from '../community/create/CreateCommunityContentModal';
+import CreateStudyGroupModal from '../community/groups/CreateStudyGroupModal';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 
-/** Light layout for the Courses module: shared header + drawer, light background, footer. */
-const withLayoutCourse = (Component: any) => {
+/** Light marketplace layout: shared header + drawer, light background, footer. */
+const withLayoutCourse = (Component: any, options?: { title?: string }) => {
+	const pageTitle = options?.title ?? 'Courses — Academics';
 	const WithLayoutCourse = (props: any) => {
 		const device = useDeviceDetect();
 
@@ -23,8 +26,8 @@ const withLayoutCourse = (Component: any) => {
 		return (
 			<>
 				<Head>
-					<title>Courses — Academics</title>
-					<meta name={'title'} content={`Courses — Academics`} />
+					<title>{pageTitle}</title>
+					<meta name={'title'} content={pageTitle} />
 				</Head>
 				<Stack id={device === 'mobile' ? 'mobile-wrap' : 'pc-wrap'} className={'home-layout course-layout'}>
 					<HomeHeader />
@@ -36,6 +39,9 @@ const withLayoutCourse = (Component: any) => {
 							<Footer />
 						</Stack>
 					</Stack>
+
+					<CreateCommunityContentModal />
+					<CreateStudyGroupModal />
 				</Stack>
 			</>
 		);

@@ -6,7 +6,8 @@
 
 /* Shared design tokens + components used by both the listing and detail pages. */
 .course-page,
-.course-detail-page {
+.course-detail-page,
+.instructor-detail-page {
 	--cp-purple: #5b35f5;
 	--cp-purple-dark: #4527c9;
 	--cp-purple-soft: #efeaff;
@@ -1451,7 +1452,9 @@
 }
 
 /* ---------------- Course preview modal ---------------- */
-.course-preview-modal {
+.base-video-modal,
+.course-preview-modal,
+.instructor-intro-modal {
 	.MuiDialog-paper {
 		width: min(1060px, calc(100% - 48px));
 		max-width: none;
@@ -1579,6 +1582,14 @@
 		color: #171a2e;
 	}
 
+	.preview-video-label {
+		font-size: 12px;
+		font-weight: 700;
+		letter-spacing: 0.4px;
+		text-transform: uppercase;
+		color: #5b35f5;
+	}
+
 	.preview-instructor {
 		display: flex;
 		align-items: center;
@@ -1588,11 +1599,29 @@
 		color: #5d627a;
 
 		img {
-			width: 32px;
-			height: 32px;
+			width: 36px;
+			height: 36px;
 			border-radius: 50%;
 			object-fit: cover;
 			background: #efeaff;
+		}
+
+		.preview-instructor-meta {
+			display: flex;
+			flex-direction: column;
+			gap: 2px;
+
+			span {
+				font-weight: 700;
+				color: #171a2e;
+			}
+
+			em {
+				font-style: normal;
+				font-size: 13px;
+				color: #5b35f5;
+				font-weight: 600;
+			}
 		}
 	}
 
@@ -1657,6 +1686,24 @@
 				color: #5b35f5;
 				text-transform: capitalize;
 			}
+		}
+	}
+
+	.preview-tags {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 8px;
+
+		li {
+			padding: 6px 12px;
+			border-radius: 999px;
+			background: #efeaff;
+			color: #5b35f5;
+			font-size: 12.5px;
+			font-weight: 600;
 		}
 	}
 
@@ -1756,7 +1803,9 @@
 }
 
 @media (max-width: 1024px) {
-	.course-preview-modal {
+	.base-video-modal,
+	.course-preview-modal,
+	.instructor-intro-modal {
 		.preview-body {
 			grid-template-columns: 1fr;
 		}
@@ -1768,7 +1817,9 @@
 }
 
 @media (max-width: 767px) {
-	.course-preview-modal {
+	.base-video-modal,
+	.course-preview-modal,
+	.instructor-intro-modal {
 		.MuiDialog-paper {
 			width: 100%;
 			border-radius: 0;

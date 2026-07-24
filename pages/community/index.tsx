@@ -1,295 +1,197 @@
-import React, { useEffect, useState } from 'react';
-import { NextPage } from 'next';
+import React, { useEffect, useMemo, useState } from 'react';
+import { GetStaticProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
-import { TabContext, TabList, TabPanel } from '@mui/lab';
-import { Stack, Tab, Typography, Button, Pagination } from '@mui/material';
-import CommunityCard from '../../libs/components/common/CommunityCard';
-import useDeviceDetect from '../../libs/hooks/useDeviceDetect';
-import withLayoutBasic from '../../libs/components/layout/LayoutBasic';
-import { BoardArticle } from '../../libs/types/board-article/board-article';
-import { T } from '../../libs/types/common';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { BoardArticlesInquiry } from '../../libs/types/board-article/board-article.input';
-import { BoardArticleCategory } from '../../libs/enums/board-article.enum';
-import { LIKE_TARGET_BOARD_ARTICLE } from '../../apollo/user/mutation';
-import { useMutation, useQuery } from '@apollo/client';
-import { GET_BOARD_ARTICLES } from '../../apollo/user/query';
-import { Message } from '../../libs/enums/common.enum';
-import { sweetMixinErrorAlert, sweetTopSmallSuccessAlert } from '../../libs/sweetAlert';
-import { Messages } from '../../libs/config';
+import { useTranslation } from 'next-i18next';
+import { useReactiveVar } from '@apollo/client';
+import { Drawer, IconButton } from '@mui/material';
+import MenuOutlinedIcon from '@mui/icons-material/MenuOutlined';
+import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
+import withLayoutCourse from '../../libs/components/layout/LayoutCourse';
+import CommunitySidebar from '../../libs/components/community/home/CommunitySidebar';
+import CommunityHero from '../../libs/components/community/home/CommunityHero';
+import TrendingDiscussions from '../../libs/components/community/home/TrendingDiscussions';
+import ActivityFeed from '../../libs/components/community/home/ActivityFeed';
+import CommunityRightSidebar from '../../libs/components/community/home/CommunityRightSidebar';
+import StudyGroupsSection from '../../libs/components/community/home/StudyGroupsSection';
+import { openCreateContentModal } from '../../libs/components/community/create/createContentModalState';
+import { openCreateStudyGroupModal } from '../../libs/components/community/groups/createStudyGroupModalState';
+import { userVar } from '../../apollo/store';
+import { sweetMixinErrorAlert, sweetTopSuccessAlert } from '../../libs/sweetAlert';
+import {
+	COMMUNITY_CONTRIBUTORS,
+	COMMUNITY_EVENTS,
+	COMMUNITY_ONLINE_MEMBERS,
+	COMMUNITY_ROOMS,
+	COMMUNITY_STATS,
+	COMMUNITY_STUDY_GROUPS,
+	TRENDING_DISCUSSIONS,
+	getActivityFeedByTab,
+} from '../../libs/mock/community.mock';
+import { requestJoinStudyGroup } from '../../libs/mock/communityGroups.store';
+import { REACT_APP_API_URL } from '../../libs/config';
+import {
+	ActivityFeedTab,
+	CommunityCreateAction,
+	CommunityNavId,
+	CommunityStudyGroup,
+	mapCreateActionToType,
+} from '../../libs/types/community/community';
 
-export const getStaticProps = async ({ locale }: any) => ({
+export const getStaticProps: GetStaticProps = async ({ locale }) => ({
 	props: {
-		...(await serverSideTranslations(locale, ['common'])),
+		...(await serverSideTranslations(locale ?? 'en', ['common'])),
 	},
 });
 
-const Community: NextPage = ({ initialInput, ...props }: T) => {
-	const device = useDeviceDetect();
+const CommunityHome: NextPage = () => {
+	const { t } = useTranslation('common');
 	const router = useRouter();
-	const { query } = router;
-	const articleCategory = query?.articleCategory as string;
-	const [searchCommunity, setSearchCommunity] = useState<BoardArticlesInquiry>(initialInput);
-	const [boardArticles, setBoardArticles] = useState<BoardArticle[]>([]);
-	const [totalCount, setTotalCount] = useState<number>(0);
-	if (articleCategory) initialInput.search.articleCategory = articleCategory;
+	const user = useReactiveVar(userVar);
+	const [activeNav, setActiveNav] = useState<CommunityNavId>('home');
+	const [feedTab, setFeedTab] = useState<ActivityFeedTab>('all');
+	const [roomsDrawerOpen, setRoomsDrawerOpen] = useState(false);
 
-	/** APOLLO REQUESTS **/
-	const [likeTargetBoardArticle] = useMutation(LIKE_TARGET_BOARD_ARTICLE);
-	const {
-		loading: boardArticlesLoading,
-		data: boardArticlesData,
-		error: boardArticlesError,
-		refetch: boardArticlesRefetch,
-	} = useQuery(GET_BOARD_ARTICLES, {
-		fetchPolicy: 'cache-and-network',
-		variables: { input: searchCommunity },
-		notifyOnNetworkStatusChange: true,
-		onCompleted: (data: T) => {
-			setBoardArticles(data?.getBoardArticles?.list);
-			setTotalCount(data?.getBoardArticles?.metaCounter[0]?.total);
-		},
-	});
+	const feedItems = useMemo(() => getActivityFeedByTab(feedTab), [feedTab]);
+	const displayName = user?.memberNick || t('Learner');
 
-	/** LIFECYCLES **/
 	useEffect(() => {
-		if (!query?.articleCategory)
-			router.push(
-				{
-					pathname: router.pathname,
-					query: { articleCategory: 'FREE' },
-				},
-				router.pathname,
-				{ shallow: true },
-			);
-	}, []);
-
-	/** HANDLERS **/
-	const tabChangeHandler = async (e: T, value: string) => {
-		console.log(value);
-
-		setSearchCommunity({ ...searchCommunity, page: 1, search: { articleCategory: value as BoardArticleCategory } });
-		await router.push(
-			{
-				pathname: '/community',
-				query: { articleCategory: value },
-			},
-			router.pathname,
-			{ shallow: true },
-		);
-	};
-
-	const paginationHandler = (e: T, value: number) => {
-		setSearchCommunity({ ...searchCommunity, page: value });
-	};
-	const likeArticleHandler = async (e: any, user: T, id: string) => {
-		try {
-			e.stopPropagation();
-			if (!id) return;
-			if (!user._id) throw new Error(Messages.error2);
-
-			await likeTargetBoardArticle({
-				variables: { input: id },
-			});
-
-			await boardArticlesRefetch({ input: searchCommunity });
-
-			await sweetTopSmallSuccessAlert('success', 800);
-		} catch (err: any) {
-			console.log('Error, likePropertyHandler', err.message);
-			sweetMixinErrorAlert(err.message).then();
+		if (!router.isReady) return;
+		const createQuery = typeof router.query.create === 'string' ? router.query.create : undefined;
+		const hashCreate = router.asPath.includes('#create');
+		if (createQuery || hashCreate) {
+			openCreateContentModal(mapCreateActionToType(createQuery as CommunityCreateAction));
+			if (createQuery) {
+				const { create: _omit, ...rest } = router.query;
+				void router.replace({ pathname: '/community', query: rest }, undefined, { shallow: true });
+			}
 		}
+	}, [router.isReady, router.query.create, router.asPath]);
+
+	const createHandler = (action: CommunityCreateAction, draft?: string) => {
+		openCreateContentModal(action, draft);
 	};
 
-	if (device === 'mobile') {
-		return <h1>COMMUNITY PAGE MOBILE</h1>;
-	} else {
-		return (
-			<div id="community-list-page">
-				<div className="container">
-					<TabContext value={searchCommunity.search.articleCategory}>
-						<Stack className="main-box">
-							<Stack className="left-config">
-								<Stack className={'image-info'}>
-									<img src={'/img/logo/logoText.svg'} />
-									<Stack className={'community-name'}>
-										<Typography className={'name'}>Academics Community</Typography>
-									</Stack>
-								</Stack>
+	const navHandler = async (id: CommunityNavId) => {
+		setActiveNav(id);
+		setRoomsDrawerOpen(false);
+		if (id === 'home') return;
+		await sweetTopSuccessAlert(t('This section will be available soon.'));
+	};
 
-								<TabList
-									orientation="vertical"
-									aria-label="lab API tabs example"
-									TabIndicatorProps={{
-										style: { display: 'none' },
-									}}
-									onChange={tabChangeHandler}
-								>
-									<Tab
-										value={'FREE'}
-										label={'Free Board'}
-										className={`tab-button ${searchCommunity.search.articleCategory == 'FREE' ? 'active' : ''}`}
-									/>
-									<Tab
-										value={'RECOMMEND'}
-										label={'Recommendation'}
-										className={`tab-button ${searchCommunity.search.articleCategory == 'RECOMMEND' ? 'active' : ''}`}
-									/>
-									<Tab
-										value={'NEWS'}
-										label={'News'}
-										className={`tab-button ${searchCommunity.search.articleCategory == 'NEWS' ? 'active' : ''}`}
-									/>
-									<Tab
-										value={'HUMOR'}
-										label={'Humor'}
-										className={`tab-button ${searchCommunity.search.articleCategory == 'HUMOR' ? 'active' : ''}`}
-									/>
-								</TabList>
-							</Stack>
-							<Stack className="right-config">
-								<Stack className="panel-config">
-									<Stack className="title-box">
-										<Stack className="left">
-											<Typography className="title">{searchCommunity.search.articleCategory} BOARD</Typography>
-											<Typography className="sub-title">
-												Express your opinions freely here without content restrictions
-											</Typography>
-										</Stack>
-										<Button
-											onClick={() =>
-												router.push({
-													pathname: '/mypage',
-													query: {
-														category: 'writeArticle',
-													},
-												})
-											}
-											className="right"
-										>
-											Write
-										</Button>
-									</Stack>
+	const createGroupHandler = async () => {
+		setRoomsDrawerOpen(false);
+		if (!user?._id) {
+			await sweetMixinErrorAlert(t('Sign in to create a study group.'));
+			return;
+		}
+		openCreateStudyGroupModal();
+	};
 
-									<TabPanel value="FREE">
-										<Stack className="list-box">
-											{totalCount ? (
-												boardArticles?.map((boardArticle: BoardArticle) => {
-													return (
-														<CommunityCard
-															boardArticle={boardArticle}
-															key={boardArticle?._id}
-															likeArticleHandler={likeArticleHandler}
-														/>
-													);
-												})
-											) : (
-												<Stack className={'no-data'}>
-													<img src="/img/icons/icoAlert.svg" alt="" />
-													<p>No Article found!</p>
-												</Stack>
-											)}
-										</Stack>
-									</TabPanel>
-									<TabPanel value="RECOMMEND">
-										<Stack className="list-box">
-											{totalCount ? (
-												boardArticles?.map((boardArticle: BoardArticle) => {
-													return (
-														<CommunityCard
-															boardArticle={boardArticle}
-															key={boardArticle?._id}
-															likeArticleHandler={likeArticleHandler}
-														/>
-													);
-												})
-											) : (
-												<Stack className={'no-data'}>
-													<img src="/img/icons/icoAlert.svg" alt="" />
-													<p>No Article found!</p>
-												</Stack>
-											)}
-										</Stack>
-									</TabPanel>
-									<TabPanel value="NEWS">
-										<Stack className="list-box">
-											{totalCount ? (
-												boardArticles?.map((boardArticle: BoardArticle) => {
-													return (
-														<CommunityCard
-															boardArticle={boardArticle}
-															key={boardArticle?._id}
-															likeArticleHandler={likeArticleHandler}
-														/>
-													);
-												})
-											) : (
-												<Stack className={'no-data'}>
-													<img src="/img/icons/icoAlert.svg" alt="" />
-													<p>No Article found!</p>
-												</Stack>
-											)}
-										</Stack>
-									</TabPanel>
-									<TabPanel value="HUMOR">
-										<Stack className="list-box">
-											{totalCount ? (
-												boardArticles?.map((boardArticle: BoardArticle) => {
-													return (
-														<CommunityCard
-															boardArticle={boardArticle}
-															key={boardArticle?._id}
-															likeArticleHandler={likeArticleHandler}
-														/>
-													);
-												})
-											) : (
-												<Stack className={'no-data'}>
-													<img src="/img/icons/icoAlert.svg" alt="" />
-													<p>No Article found!</p>
-												</Stack>
-											)}
-										</Stack>
-									</TabPanel>
-								</Stack>
-							</Stack>
-						</Stack>
-					</TabContext>
+	const joinGroupHandler = async (group: CommunityStudyGroup) => {
+		if (!user?._id) {
+			await sweetMixinErrorAlert(t('Sign in to join a study group.'));
+			return;
+		}
+		const avatar = user.memberImage
+			? user.memberImage.startsWith('/') || user.memberImage.startsWith('http')
+				? user.memberImage
+				: `${REACT_APP_API_URL}/${user.memberImage}`
+			: '/img/profile/defaultUser.svg';
+		const result = await requestJoinStudyGroup({
+			slug: group.slug,
+			userId: user._id,
+			userName: user.memberNick || 'You',
+			userAvatar: avatar,
+		});
+		if (!result.ok) {
+			await sweetMixinErrorAlert(t(result.error));
+			return;
+		}
+		if (result.state === 'pending') {
+			await sweetTopSuccessAlert(t('Join request submitted. Awaiting approval.'));
+			return;
+		}
+		await sweetTopSuccessAlert(t('You joined this group.'));
+		await router.push(`/community/groups/${group.slug}`);
+	};
 
-					{totalCount > 0 && (
-						<Stack className="pagination-config">
-							<Stack className="pagination-box">
-								<Pagination
-									count={Math.ceil(totalCount / searchCommunity.limit)}
-									page={searchCommunity.page}
-									shape="circular"
-									color="primary"
-									onChange={paginationHandler}
-								/>
-							</Stack>
-							<Stack className="total-result">
-								<Typography>
-									Total {totalCount} article{totalCount > 1 ? 's' : ''} available
-								</Typography>
-							</Stack>
-						</Stack>
-					)}
+	const seeAllOnlineHandler = async () => {
+		await sweetTopSuccessAlert(t('Full online member list will be available soon.'));
+	};
+
+	return (
+		<div className={'community-home-page'}>
+			<div className={'community-home-container'}>
+				<div className={'community-mobile-bar'}>
+					<button
+						type="button"
+						className={'mobile-rooms-btn'}
+						aria-label={t('Open rooms menu')}
+						onClick={() => setRoomsDrawerOpen(true)}
+					>
+						<MenuOutlinedIcon />
+						{t('Rooms & Groups')}
+					</button>
 				</div>
+
+				<div className={'community-home-layout'}>
+					<div className={'community-left-col'}>
+						<CommunitySidebar
+							activeNav={activeNav}
+							onNavSelect={navHandler}
+							rooms={COMMUNITY_ROOMS}
+							groups={COMMUNITY_STUDY_GROUPS}
+							onCreateGroup={createGroupHandler}
+						/>
+					</div>
+
+					<main className={'community-main-col'}>
+						<CommunityHero userName={displayName} stats={COMMUNITY_STATS} onCreate={createHandler} />
+						<TrendingDiscussions items={TRENDING_DISCUSSIONS} />
+						<ActivityFeed items={feedItems} activeTab={feedTab} onTabChange={setFeedTab} />
+					</main>
+
+					<div className={'community-right-col'}>
+						<CommunityRightSidebar
+							onlineMembers={COMMUNITY_ONLINE_MEMBERS}
+							onlineCount={COMMUNITY_ONLINE_MEMBERS.length + 42}
+							events={COMMUNITY_EVENTS}
+							contributors={COMMUNITY_CONTRIBUTORS}
+							onSeeAllOnline={seeAllOnlineHandler}
+						/>
+					</div>
+				</div>
+
+				<StudyGroupsSection
+					groups={COMMUNITY_STUDY_GROUPS}
+					onJoin={joinGroupHandler}
+					onCreateGroup={createGroupHandler}
+				/>
 			</div>
-		);
-	}
+
+			<Drawer
+				anchor="left"
+				open={roomsDrawerOpen}
+				onClose={() => setRoomsDrawerOpen(false)}
+				className={'community-rooms-drawer'}
+			>
+				<div className={'rooms-drawer-head'}>
+					<span>{t('Rooms & Groups')}</span>
+					<IconButton aria-label={t('Close rooms menu')} onClick={() => setRoomsDrawerOpen(false)}>
+						<CloseOutlinedIcon />
+					</IconButton>
+				</div>
+				<CommunitySidebar
+					activeNav={activeNav}
+					onNavSelect={navHandler}
+					rooms={COMMUNITY_ROOMS}
+					groups={COMMUNITY_STUDY_GROUPS}
+					onCreateGroup={createGroupHandler}
+				/>
+			</Drawer>
+		</div>
+	);
 };
 
-Community.defaultProps = {
-	initialInput: {
-		page: 1,
-		limit: 6,
-		sort: 'createdAt',
-		direction: 'ASC',
-		search: {
-			articleCategory: 'FREE',
-		},
-	},
-};
-
-export default withLayoutBasic(Community);
+export default withLayoutCourse(CommunityHome, { title: 'Community — Academics' });
