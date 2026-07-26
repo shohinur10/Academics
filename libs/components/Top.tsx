@@ -194,12 +194,14 @@ const Top = () => {
 									</Menu>
 								</>
 							) : (
-								<Link href={'/account/join'}>
-									<div className={'join-box'}>
-										<AccountCircleOutlinedIcon />
-										<span>{t('Login')} / {t('Register')}</span>
-									</div>
-								</Link>
+								<div className={'join-box'}>
+									<AccountCircleOutlinedIcon />
+									<span>
+										<Link href={'/account/login'}>{t('Login')}</Link>
+										{' / '}
+										<Link href={'/account/register'}>{t('Register')}</Link>
+									</span>
+								</div>
 							)}
 
 							<div className={'lan-box'}>

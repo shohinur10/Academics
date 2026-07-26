@@ -77,14 +77,20 @@ const NavigationDrawer = ({ open, onClose }: NavigationDrawerProps) => {
 				<div className={'drawer-bottom'}>
 					<hr className={'drawer-divider'} />
 					{!user?._id && (
-						<Link href={'/account/join'}>
-							<div className={'drawer-nav-item'} onClick={onClose}>
-								<AccountCircleOutlinedIcon />
-								<span>
-									{t('Login')} / {t('Register')}
-								</span>
-							</div>
-						</Link>
+						<>
+							<Link href={'/account/login'}>
+								<div className={'drawer-nav-item'} onClick={onClose}>
+									<AccountCircleOutlinedIcon />
+									<span>{t('Login')}</span>
+								</div>
+							</Link>
+							<Link href={'/account/register'}>
+								<div className={'drawer-nav-item'} onClick={onClose}>
+									<AccountCircleOutlinedIcon />
+									<span>{t('Register')}</span>
+								</div>
+							</Link>
+						</>
 					)}
 					<div className={'drawer-lang'}>
 						<LanguageSelector showLabel />

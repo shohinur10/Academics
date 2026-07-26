@@ -302,7 +302,7 @@ const CourseDetail: NextPage = () => {
 				<div className={'bar-price'}>
 					<PriceDisplay price={course.coursePrice} originalPrice={course.courseOriginalPrice} />
 				</div>
-				<Link href={'/account/join'} className={'bar-enroll-btn'}>
+				<Link href={'/account/login'} className={'bar-enroll-btn'}>
 					{t('Enroll Now')}
 				</Link>
 			</div>

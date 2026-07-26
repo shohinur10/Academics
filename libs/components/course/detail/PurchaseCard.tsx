@@ -89,7 +89,7 @@ const PurchaseCard = ({ course, onPreview }: PurchaseCardProps) => {
 					<PriceDisplay price={course.coursePrice} originalPrice={course.courseOriginalPrice} showDiscount />
 				</div>
 
-				<Link href={'/account/join'} className={'purchase-enroll-btn'}>
+				<Link href={'/account/login'} className={'purchase-enroll-btn'}>
 					{t('Enroll Now')}
 				</Link>
 

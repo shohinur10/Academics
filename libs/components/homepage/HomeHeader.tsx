@@ -133,14 +133,14 @@ const HomeHeader = () => {
 							</Menu>
 						</>
 					) : (
-						<Link href={'/account/join'}>
-							<div className={'header-join-btn'}>
-								<AccountCircleOutlinedIcon />
-								<span>
-									{t('Login')} / {t('Register')}
-								</span>
-							</div>
-						</Link>
+						<div className={'header-join-btn'}>
+							<AccountCircleOutlinedIcon />
+							<span>
+								<Link href={'/account/login'}>{t('Login')}</Link>
+								{' / '}
+								<Link href={'/account/register'}>{t('Register')}</Link>
+							</span>
+						</div>
 					)}
 
 					<div className={'header-lang'}>

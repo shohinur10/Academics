@@ -12,7 +12,7 @@ const FinalCta = () => {
 				<h2 id="final-cta-title">{t('Start your learning journey today')}</h2>
 				<p>{t('Join thousands of students and unlock your potential.')}</p>
 				<div className={'final-cta-actions'}>
-					<Link href={'/account/join'} className={'cta-primary'}>
+					<Link href={'/account/register'} className={'cta-primary'}>
 						{t('Get Started')}
 						<ArrowForwardRoundedIcon />
 					</Link>

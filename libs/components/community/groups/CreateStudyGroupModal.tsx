@@ -172,7 +172,7 @@ const CreateStudyGroupModal = () => {
 					{!user?._id ? (
 						<p className={'auth-hint'}>
 							{t('Sign in required.')}{' '}
-							<a href="/account/join">{t('Join / Login')}</a>
+							<a href="/account/login">{t('Join / Login')}</a>
 						</p>
 					) : null}
 
